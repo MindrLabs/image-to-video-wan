@@ -1,0 +1,47 @@
+controller:
+  adapter:
+    type: http-server
+    port: ${env.PORT | 8080}
+    base_path: /api
+  webui:
+    driver: gradio
+    port: ${env.SERVER_PORT | 8081}
+
+workflows:
+  - id: animate-5b
+    title: Wan2.2 TI2V-5B Image-to-Video
+    description: Animate a still image into a short clip with Wan2.2 TI2V-5B.
+    job:
+      component: wan-ti2v-5b
+      input: ${input}
+      output: ${output}
+    output: ${jobs.__job__.output}
+
+components:
+  - id: wan-ti2v-5b
+    type: model
+    task: image-to-video
+    driver: custom
+    family: wan
+    preset: ti2v-5b
+    model: ${env.WAN_TI2V_5B_MODEL | Wan-AI/Wan2.2-TI2V-5B}
+    device: ${env.WAN_DEVICE | cuda}
+    cpu_offload: ${env.WAN_CPU_OFFLOAD | false}
+    preload: false
+    runtime:
+      type: virtualenv
+      driver: python
+      path: .venv/wan-ti2v-5b
+    action:
+      image: ${input.image as image}
+      prompt: ${input.prompt}
+      negative_prompt: ${input.negative_prompt}
+      seed: ${input.seed as integer}
+      params:
+        num_frames: 121
+        frame_rate: 24
+        inference_steps: 50
+        guidance_scale: 5.0
+        width: ${input.width as integer | 1280}
+        height: ${input.height as integer | 704}
+      output: ${result as video/mp4}
