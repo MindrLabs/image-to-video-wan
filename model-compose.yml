@@ -37,11 +37,11 @@ components:
       prompt: ${input.prompt}
       negative_prompt: ${input.negative_prompt}
       seed: ${input.seed as integer}
+      width: ${input.width as integer | 1280}
+      height: ${input.height as integer | 704}
+      frame_rate: 24
       params:
         num_frames: 121
-        frame_rate: 24
         inference_steps: 50
         guidance_scale: 5.0
-        width: ${input.width as integer | 1280}
-        height: ${input.height as integer | 704}
       output: ${result as video/mp4}

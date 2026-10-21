@@ -35,7 +35,7 @@ Wan2.2 모델 카드는 TI2V-5B가 텍스트와 이미지에서 720P, 24fps 영�
 
 ## 빠른 시작
 
-[model-compose](https://github.com/hanyeol/model-compose) 0.4.118 이상이 필요합니다.
+[model-compose](https://github.com/hanyeol/model-compose) 0.4.120 이상이 필요합니다.
 
 [uv](https://docs.astral.sh/uv/)로 설치:
 

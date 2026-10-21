@@ -35,7 +35,7 @@ Wan2.2 模型卡称 TI2V-5B 可从文本和图片生成 720P、24fps 视频，�
 
 ## 快速开始
 
-需要 [model-compose](https://github.com/hanyeol/model-compose) 0.4.118 或更高版本。
+需要 [model-compose](https://github.com/hanyeol/model-compose) 0.4.120 或更高版本。
 
 使用 [uv](https://docs.astral.sh/uv/) 安装：
 

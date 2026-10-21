@@ -35,7 +35,7 @@ Weights: [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tr
 
 ## Quick start
 
-It needs [model-compose](https://github.com/hanyeol/model-compose) 0.4.118 or later.
+It needs [model-compose](https://github.com/hanyeol/model-compose) 0.4.120 or later.
 
 Install with [uv](https://docs.astral.sh/uv/):
 
