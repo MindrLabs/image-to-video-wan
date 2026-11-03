@@ -122,7 +122,7 @@ Gradio UI 주소는 http://localhost:8081 입니다.
 | RTX 4090 | flooded-city | 514 | 102 | 24050 (VRAM) |
 | RTX 4090 | train-turtle | 518 | 103 | 23928 (VRAM) |
 
-![그림 한 장을 영상으로 (5B), RTX 4090](docs/images/shared/animate-5b-v6.nvidia-rtx-4090-24gb.frames.jpg)
+![그림 한 장을 영상으로 (5B), RTX 4090](docs/images/animate-a-still.jpg)
 
 RTX 4090: 수족관, 침수된 도시, 기차와 거북 영상에서 고른 프레임입니다.
 

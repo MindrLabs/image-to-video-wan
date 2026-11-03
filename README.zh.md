@@ -122,7 +122,7 @@ Gradio 界面地址为 http://localhost:8081 。
 | RTX 4090 | flooded-city | 514 | 102 | 24050 (VRAM) |
 | RTX 4090 | train-turtle | 518 | 103 | 23928 (VRAM) |
 
-![单图生成视频（5B）、RTX 4090](docs/images/shared/animate-5b-v6.nvidia-rtx-4090-24gb.frames.jpg)
+![单图生成视频（5B）、RTX 4090](docs/images/animate-a-still.jpg)
 
 RTX 4090：取自水族馆、被淹城市以及火车与海龟视频的画面。
 

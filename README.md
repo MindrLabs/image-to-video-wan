@@ -122,7 +122,7 @@ Each cell is the median over measured calls, leaving out any call made during ot
 | RTX 4090 | flooded-city | 514 | 102 | 24050 (VRAM) |
 | RTX 4090 | train-turtle | 518 | 103 | 23928 (VRAM) |
 
-![Animate a still (5B), RTX 4090](docs/images/shared/animate-5b-v6.nvidia-rtx-4090-24gb.frames.jpg)
+![Animate a still (5B), RTX 4090](docs/images/animate-a-still.jpg)
 
 RTX 4090: Frames from the aquarium, flooded city and train and turtle clips.
 
