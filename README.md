@@ -1,4 +1,4 @@
-[English](README.md) · [한국어](README.ko.md) · [中文](README.zh-cn.md)
+[English](README.md) · [한국어](README.ko.md) · [中文](README.zh.md)
 
 # image-to-video-wan
 
@@ -7,20 +7,6 @@ This service takes one picture and a prompt that describes the motion, and retur
 Measured on DGX Spark, RTX 4090; it is not compared with other models.
 Results marked “Judged by a person” are a person's verdicts, given before the agent's proposal was shown.
 A person wrote every feature observation from the output itself; the agent's draft was shown only afterwards.
-
-## Contents
-
-- [Model](#model)
-- [Demo](#demo)
-- [Quick start](#quick-start)
-- [Summary](#summary)
-- [Setup](#setup)
-- [Does it run on my device?](#does-it-run-on-my-device)
-- [Results by feature](#results-by-feature)
-  - [Animate a still (5B)](#animate-a-still-5b)
-- [Recommendations](#recommendations)
-- [Limitations and what we did not measure](#limitations-and-what-we-did-not-measure)
-- [License](#license)
 
 ## Model
 
@@ -33,7 +19,7 @@ Weights: [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tr
 
 ![A web page where an aquarium picture and a prompt go in and a clip of a drifting jellyfish comes out.](docs/images/demo.gif)
 
-## Quick start
+## Quick Start
 
 It needs [model-compose](https://github.com/hanyeol/model-compose) 0.4.120 or later.
 
@@ -90,27 +76,27 @@ Feature outputs were made once per input and setting through the same measuremen
 | Claim rules | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
 | Statistics | 95% intervals, speed differences under 1.05× are not called |
 
-## Does it run on my device?
+## Does It Run on My Device?
 
 - Speed is given as RTF, the generation time divided by the length of the output clip, so lower is faster.
 - The median RTF was 102 on the RTX 4090 and 276 on the DGX Spark.
 - One 5.04-second clip took 514 to 518 seconds on the RTX 4090 and 1338 to 1420 seconds on the DGX Spark.
 - GPU memory peaked at 24050 MiB on the RTX 4090 and 30135 MiB on the DGX Spark.
 
-### Machine comparisons
+### Machine Comparisons
 
 | Machines | Metric | Inputs | Estimate | Interval | Result |
 | :---: | --- | --- | --- | --- | --- |
 | DGX Spark vs RTX 4090 | RTF | 3 | — | — | Not judged |
 | DGX Spark vs RTX 4090 | aspect_ratio_error | 3 | — | — | Not judged |
 
-## Results by feature
+## Results by Feature
 
 | Question | Result |
 | :---: | --- |
 | Can one picture and a short prompt turn that scene into a moving clip? | Yes, all three clips started from their picture and moved the way the prompt asked, but a face came out distorted in two of them. |
 
-### Animate a still (5B)
+### Animate a Still (5B)
 
 Three pictures went in, each with an English prompt that describes the motion in the scene and a static camera.
 
@@ -157,14 +143,14 @@ Rows, top to bottom:
 - The RTX 4090 uses nearly all of its GPU memory, so do not run other work on the same GPU.
 - Faces can come out distorted, so watch the whole clip before using it.
 
-## Limitations and what we did not measure
+## Limitations and What We Did Not Measure
 
 ### Defects
 
 - In the flooded city clip the girl's face came out distorted.
 - In the train and turtle clip the light grew too strong and the girl's face came out distorted.
 
-### Other limitations
+### Other Limitations
 
 - DGX Spark and RTX 4090 were not compared on RTF: Only 3 inputs were measured on both machines without other GPU work, and at least 20 are needed.
 - DGX Spark and RTX 4090 were not compared on aspect_ratio_error: Only 3 inputs were scored on both machines, and at least 20 are needed.
