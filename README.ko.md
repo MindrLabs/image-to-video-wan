@@ -15,8 +15,6 @@
 Wan2.2 모델 카드는 TI2V-5B가 텍스트와 이미지에서 720P, 24fps 영상을 만들고 RTX 4090 같은 소비자용 GPU 한 장에서 돈다고 말합니다.
 카드는 출력 비율이 입력 그림을 따르고, 소비자용 GPU 한 장에서 짧은 720P 영상을 만드는 데 걸리는 시간 한도도 적어 둡니다.
 
-가중치: [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e)
-
 ## 빠른 시작
 
 [model-compose](https://github.com/hanyeol/model-compose) 0.4.120 이상이 필요합니다.
@@ -69,7 +67,7 @@ Gradio UI 주소는 http://localhost:8081 입니다.
 | 항목 | 값 |
 | :---: | --- |
 | 입력 | 입력 3개 × 반복 2회 |
-| 체크포인트 | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
+| 가중치 | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
 | model-compose | 0.4.118 |
 | 주장 판정 규칙 | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
 | 통계 | 95% 구간, 1.05배 미만 속도 차이는 판정 제외 |

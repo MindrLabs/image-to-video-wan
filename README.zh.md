@@ -15,8 +15,6 @@
 Wan2.2 模型卡称 TI2V-5B 可从文本和图片生成 720P、24fps 视频，并能在 RTX 4090 这样的单张消费级 GPU 上运行。
 模型卡还称输出比例跟随输入图片，并给出了在单张消费级 GPU 上生成一段短 720P 视频的时间上限。
 
-权重：[Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e)
-
 ## 快速开始
 
 需要 [model-compose](https://github.com/hanyeol/model-compose) 0.4.120 或更高版本。
@@ -69,7 +67,7 @@ Gradio 界面地址为 http://localhost:8081 。
 | 项目 | 值 |
 | :---: | --- |
 | 输入 | 3 个输入 × 2 次重复 |
-| 检查点 | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
+| 权重 | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
 | model-compose | 0.4.118 |
 | 声明判定规则 | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
 | 统计 | 95% 置信区间，低于 1.05× 的速度差异不作判定 |

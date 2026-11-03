@@ -15,8 +15,6 @@ A person wrote every feature observation from the output itself; the agent's dra
 The Wan2.2 model card says TI2V-5B makes 720P, 24fps video from text and images and runs on a single consumer GPU such as the RTX 4090.
 The card also says the output follows the aspect ratio of the input picture and gives a time limit for a short 720P clip on a single consumer GPU.
 
-Weights: [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e)
-
 ## Quick Start
 
 It needs [model-compose](https://github.com/hanyeol/model-compose) 0.4.120 or later.
@@ -69,7 +67,7 @@ Feature outputs were made once per input and setting through the same measuremen
 | Item | Value |
 | :---: | --- |
 | Inputs | 3 inputs × 2 repeats |
-| Checkpoint | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
+| Weights | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
 | model-compose | 0.4.118 |
 | Claim rules | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
 | Statistics | 95% intervals, speed differences under 1.05× are not called |
