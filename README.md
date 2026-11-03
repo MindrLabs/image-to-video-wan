@@ -8,16 +8,14 @@ Measured on DGX Spark, RTX 4090; it is not compared with other models.
 Results marked “Judged by a person” are a person's verdicts, given before the agent's proposal was shown.
 A person wrote every feature observation from the output itself; the agent's draft was shown only afterwards.
 
+![A web page where an aquarium picture and a prompt go in and a clip of a drifting jellyfish comes out.](docs/images/demo.gif)
+
 ## Model
 
 The Wan2.2 model card says TI2V-5B makes 720P, 24fps video from text and images and runs on a single consumer GPU such as the RTX 4090.
 The card also says the output follows the aspect ratio of the input picture and gives a time limit for a short 720P clip on a single consumer GPU.
 
 Weights: [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e)
-
-## Demo
-
-![A web page where an aquarium picture and a prompt go in and a clip of a drifting jellyfish comes out.](docs/images/demo.gif)
 
 ## Quick Start
 
