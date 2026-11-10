@@ -2,18 +2,9 @@
 
 # image-to-video-wan
 
-이 서비스는 그림 한 장과 움직임을 적은 프롬프트를 받아, 그 그림에서 시작하는 짧은 영상을 Wan-AI/Wan2.2-TI2V-5B로 만들어 돌려줍니다.
+이미지 한 장과 설명 글을 받아 Wan-AI/Wan2.2-TI2V-5B로 짧은 영상을 만들어 돌려주는 서비스입니다.
 
-측정한 기기: DGX Spark, RTX 4090. 다른 모델과는 비교하지 않았습니다.
-“사람 판정”으로 표시한 결과는 사람이 에이전트의 제안을 보기 전에 내린 판정입니다.
-기능 관찰은 모두 사람이 출력을 직접 보거나 듣고 썼고, 에이전트 초안은 그 뒤에야 보였습니다.
-
-![수족관 그림과 프롬프트를 넣어 해파리가 떠다니는 영상을 받는 웹 화면입니다.](docs/images/demo.gif)
-
-## 모델
-
-Wan2.2 모델 카드는 TI2V-5B가 텍스트와 이미지에서 720P, 24fps 영상을 만들고 RTX 4090 같은 소비자용 GPU 한 장에서 돈다고 말합니다.
-카드는 출력 비율이 입력 그림을 따르고, 소비자용 GPU 한 장에서 짧은 720P 영상을 만드는 데 걸리는 시간 한도도 적어 둡니다.
+![수족관 창 앞에 사람이 서 있는 이미지와 설명 글을 넣으면 해파리가 떠다니는 영상이 나오는 화면](docs/images/demo.gif)
 
 ## 빠른 시작
 
@@ -44,121 +35,93 @@ cd image-to-video-wan
 model-compose up
 ```
 
-API 주소는 http://localhost:8080/api 입니다.
-
-Gradio UI 주소는 http://localhost:8081 입니다.
+API 주소는 http://localhost:8080/api, Gradio UI 주소는 http://localhost:8081 입니다.
 
 ## 요약
 
-1. RTX 4090과 DGX Spark에서 쟀고, 두 기기 모두 영상 6개를 실패 없이 만들었습니다.
-2. 두 기기 모두 출력이 720P 면적, 24fps, 입력 그림 비율 규칙을 통과했고, 사람이 RTX 4090의 속도 주장과 그림을 따라가는 영상이라는 주장을 통과로 판정했습니다.
-3. 그림 세 장 모두 고정된 카메라 앞에서 해파리, 물결, 창밖 풍경처럼 프롬프트가 말한 움직임이 나왔지만, 두 영상에서 인물 얼굴이 일그러졌습니다.
-4. 그림이 3장뿐이라 RTX 4090과 DGX Spark의 속도 차이는 통계로 확인하지 못했습니다.
+RTX 4090은 5.04초 영상 하나를 만드는 데 중앙값 526초 걸려 소비자용 GPU 한 장에 대한 모델 카드의 속도 주장을 만족했습니다.
 
 | 기기 | 상태 | RTF | 최대 메모리 (MiB) |
 | :---: | --- | --- | --- |
-| DGX Spark | 측정 | 276 | 30135 (VRAM) |
-| RTX 4090 | 측정 | 102 | 24050 (VRAM) |
+| DGX Spark | 측정 | 281 | 30013 (VRAM) |
+| RTX 4090 | 측정 | 104 | 23942 (VRAM) |
+| MacBook M1 16GB | 미측정 | — | — |
 
 ## 측정 환경
 
-기능 출력은 같은 측정 경로로 입력과 설정마다 한 번씩 만들었고, 출력마다 사람이 관찰을 확정했습니다.
+model-compose 0.4.120 버전으로 측정했습니다. 통계는 95% 구간을 쓰고 1.05배 미만 속도 차이는 판정하지 않습니다.
 
-| 항목 | 값 |
-| :---: | --- |
-| 입력 | 입력 3개 × 반복 2회 |
-| 가중치 | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
-| model-compose | 0.4.118 |
-| 주장 판정 규칙 | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
-| 통계 | 95% 구간, 1.05배 미만 속도 차이는 판정 제외 |
+| 입력 | 가중치 | 주장 판정 규칙 |
+| :---: | --- | --- |
+| 입력 3개 × 반복 1회 | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
 
-## 내 기기에서 돌아가나요?
+## 결과
 
-- 속도는 RTF로 적었고, 생성에 걸린 시간을 출력 영상 길이로 나눈 값이라 낮을수록 빠릅니다.
-- RTF 중앙값은 RTX 4090에서 102, DGX Spark에서 276 값이었습니다.
-- 5.04초 영상 하나에 RTX 4090은 514초에서 518초, DGX Spark는 1338초에서 1420초 걸렸습니다.
-- GPU 메모리는 RTX 4090에서 최대 24050 MiB, DGX Spark에서 최대 30135 MiB 썼습니다.
+### 이미지로 영상 만들기
 
-### 기기 비교
+이미지 한 장을 영상의 시작으로 삼고 움직임을 설명하는 글을 함께 넣어 영상을 만듭니다.
 
-| 기기 | 지표 | 입력 | 추정 | 구간 | 결과 |
-| :---: | --- | --- | --- | --- | --- |
-| DGX Spark vs RTX 4090 | RTF | 3 | — | — | 판단 불가 |
-| DGX Spark vs RTX 4090 | aspect_ratio_error | 3 | — | — | 판단 불가 |
-
-## 기능별 결과
-
-| 질문 | 결과 |
-| :---: | --- |
-| 그림 한 장과 짧은 프롬프트로 그 장면이 움직이는 영상을 만들 수 있나요? | 네, 세 그림 모두 그림에서 시작해 프롬프트가 말한 움직임이 나왔지만 두 영상에서 인물 얼굴이 일그러졌습니다. |
-
-### 그림 한 장을 영상으로 (5B)
-
-그림 세 장에 장면의 움직임과 고정된 카메라를 적은 영어 프롬프트를 함께 넣었습니다.
-
-| 주장 | 확인 방법 | 기기 | 결과 |
+| 주장 | 확인 방법 | 기기 | 통과 |
 | :---: | --- | --- | --- |
-| TI2V-5B는 24fps 영상을 만듭니다. | 규칙 판정 | DGX Spark | 통과 |
-| TI2V-5B는 24fps 영상을 만듭니다. | 규칙 판정 | RTX 4090 | 통과 |
-| TI2V-5B는 720P 영상을 만듭니다. | 규칙 판정 | DGX Spark | 통과 |
-| TI2V-5B는 720P 영상을 만듭니다. | 규칙 판정 | RTX 4090 | 통과 |
-| TI2V-5B 영상은 입력 그림의 비율을 따릅니다. | 규칙 판정 | DGX Spark | 통과 |
-| TI2V-5B 영상은 입력 그림의 비율을 따릅니다. | 규칙 판정 | RTX 4090 | 통과 |
-| TI2V-5B는 그림을 따라가는 영상을 만듭니다. | 사람 판정 | — | 통과 |
-| TI2V-5B는 소비자용 GPU 한 장에서 5초 720P 영상을 9분 안에 만듭니다. | 사람 판정 | — | 통과 |
+| TI2V-5B는 24fps 영상을 생성합니다. | 규칙 판정 | DGX Spark | ✓ |
+| TI2V-5B는 24fps 영상을 생성합니다. | 규칙 판정 | RTX 4090 | ✓ |
+| TI2V-5B는 720P 영상을 생성합니다. | 규칙 판정 | DGX Spark | ✓ |
+| TI2V-5B는 720P 영상을 생성합니다. | 규칙 판정 | RTX 4090 | ✓ |
+| TI2V-5B 영상은 입력 이미지의 가로세로 비율을 유지합니다. | 규칙 판정 | DGX Spark | ✓ |
+| TI2V-5B 영상은 입력 이미지의 가로세로 비율을 유지합니다. | 규칙 판정 | RTX 4090 | ✓ |
+| TI2V-5B는 이미지를 따라가는 영상을 만듭니다. | 사람 판정 | — | ✓ |
+| TI2V-5B는 소비자용 GPU 한 장에서 5초 길이 720P 영상을 9분 안에 생성합니다. | 사람 판정 | — | ✓ |
 
-| 기기 | RTF | 최대 메모리 (MiB) | aspect_ratio_error | duration_sec | fps | height | pixels | width | 주장 |
+DGX Spark, RTX 4090 기기에서 측정했습니다. MacBook M1 16GB 기기에서는 측정하지 못했습니다. RTF는 처리에 걸린 시간을 오디오나 영상 길이로 나눈 값이라 낮을수록 빠릅니다. 각 칸은 측정한 호출의 중앙값이며 다른 GPU 작업 중에 한 호출은 빼고 계산합니다.
+
+| 기기 | RTF | 호출당 초 | 최대 메모리 (MiB) | aspect_ratio_error | duration_sec | fps | height | pixels | width |
 | :---: | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| DGX Spark | 276 | 30135 (VRAM) | 0.0177 | 5.04 | 24 | 1003 | 878592 | 928 | 통과 |
-| RTX 4090 | 102 | 24050 (VRAM) | 0.0177 | 5.04 | 24 | 1003 | 878592 | 928 | 통과 |
+| DGX Spark | 281 | 1419 | 30013 (VRAM) | 0.0256 | 5.04 | 24 | 896 | 882688 | 1013 |
+| RTX 4090 | 104 | 526 | 23942 (VRAM) | 0.0256 | 5.04 | 24 | 896 | 882688 | 1013 |
 
-각 칸은 측정한 호출의 중앙값이며 다른 GPU 작업 중에 한 호출은 빼고 계산합니다.
+![이미지로 영상 만들기](docs/images/image-to-video-aquarium-jellyfish.gif)
 
-| 기기 | 입력 | 초 | RTF | 최대 메모리 (MiB) |
-| :---: | --- | --- | --- | --- |
-| RTX 4090 | aquarium-jellyfish | 518 | 103 | 24008 (VRAM) |
-| RTX 4090 | flooded-city | 514 | 102 | 24050 (VRAM) |
-| RTX 4090 | train-turtle | 518 | 103 | 23928 (VRAM) |
+> A girl in a school uniform stands still before a giant aquarium window, looking up as a huge glowing jellyfish drifts slowly with its long tentacles trailing, small fish swim past, sunlight ripples down through the water, static camera.
 
-![그림 한 장을 영상으로 (5B), RTX 4090](docs/images/animate-a-still.jpg)
+![이미지로 영상 만들기](docs/images/image-to-video-falling-crosswalk.gif)
 
-RTX 4090: 수족관, 침수된 도시, 기차와 거북 영상에서 고른 프레임입니다.
+> A girl in a school uniform drifts down through the air toward a sunlit crosswalk, her short hair and pleated skirt flutter in the wind, she reaches out with both arms, rippling light shimmers across the asphalt below and her shadow grows on the road, the camera slowly arcs a little around her, shifting the viewing angle.
 
-행(위에서 아래로):
+![이미지로 영상 만들기](docs/images/image-to-video-train-turtle.gif)
 
-- aquarium-jellyfish: prompt=A girl in a school uniform stands still before a giant aquarium window, looking up as a huge glowing jellyfish drifts slowly with its long tentacles trailing, small fish swim past, sunlight ripples down through the water, static camera.; image
-- flooded-city: prompt=A girl stands in shallow clear water on a flooded crosswalk between towering scaffolded buildings, looking up at a golden sky, clouds drift slowly, sheets of paper flutter in the wind, gentle ripples spread across the water, static camera.; image
-- train-turtle: prompt=A girl sits on a train bench gazing out the window as a giant turtle glides past over a ruined, overgrown city, its eye blinking slowly, warm sunbeams shift across the carriage as the train sways gently, static camera.; image
-
-- 수족관 영상에서는 해파리가 움직이고 물고기가 헤엄치며 카메라는 고정돼 있었습니다.
-- 침수된 도시 영상에서는 수면이 물결치고 깃발이 휘날리며 카메라는 고정돼 있었습니다.
-- 기차와 거북 영상에서는 거북이 눈을 깜빡이고 창밖 풍경이 지나가며 빛이 산란했고, 카메라는 고정돼 있었습니다.
+> A girl sits on a train bench gazing out the window as a giant turtle glides past over a ruined, overgrown city, its eye blinking slowly, warm sunbeams shift across the carriage as the train sways gently, static camera.
 
 ## 추천
 
-- RTX 4090에서는 GPU 메모리를 거의 다 쓰니, 같은 GPU에서 다른 작업을 함께 돌리지 않기를 권합니다.
-- 인물 얼굴이 일그러질 수 있으니 결과 영상을 끝까지 보고 쓰기를 권합니다.
+- RTX 4090에서는 GPU 메모리를 최대 23942 MiB 썼으니 실행 전에 그만큼 비워 두세요.
 
 ## 한계와 측정하지 않은 것
 
-### 결함
+- 입력 3개를 한 번씩만 생성했으니 사람이 확인한 움직임 판정은 이 출력들에만 해당합니다.
 
-- 침수된 도시 영상에서 인물 얼굴이 일그러졌습니다.
-- 기차와 거북 영상에서 빛이 지나치게 강해지고 인물 얼굴이 일그러졌습니다.
+### 측정 조건
 
-### 그 밖의 한계
+| 항목 | 내용 |
+| :---: | --- |
+| 제약 | 측정 때 서버 환경에 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True를 설정했습니다. 이 설정이 없으면 RTX 4090에서 VAE 디코딩 중 메모리가 부족했습니다. |
+| 제약 | 측정은 WAN_CPU_OFFLOAD=true로 돌렸고 model-compose.yml의 기본값은 false입니다. |
+| 주장 판정 규칙 | 규칙이 있는 주장은 기기마다 출처가 밝힌 숫자와 대조해 판정했습니다. |
 
-- DGX Spark / RTX 4090 기기 간 RTF 비교는 하지 못했습니다: 두 기기에서 다른 GPU 작업 없이 잰 입력이 3개뿐이고, 20개 이상이 필요합니다.
-- DGX Spark / RTX 4090 기기 간 aspect_ratio_error 비교는 하지 못했습니다: 두 기기에서 채점한 입력이 3개뿐이고, 20개 이상이 필요합니다.
-- 여기서 시험하지 않은 주장입니다: TI2V-5B 단일 GPU 명령은 RTX 4090 같은 24GB GPU에서 돕니다.
-- 서버는 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True를 설정합니다, 이 설정이 없으면 RTX 4090에서 VAE 디코딩 중 메모리가 모자랐기 때문입니다.
-- 속도와 사람 판정은 그림 3장으로만 쟀습니다.
-- 카드가 적은 단일 GPU 메모리 요구는 RTX 4090 한 대로만 봤고, 그 주장 자체는 따로 시험하지 않았습니다.
-- 규칙이 있는 주장은 기기마다 출처가 밝힌 숫자와 대조해 판정했습니다.
+### 측정하지 못한 것
+
+| 대상 | 항목 | 이유 |
+| :---: | --- | --- |
+| MacBook M1 16GB | 모든 측정 | 모델의 flash-attn 의존성을 Apple Silicon에 설치할 수 없었습니다. |
+| DGX Spark / RTX 4090 | RTF | 다른 GPU 작업 없이 두 기기에서 잰 입력이 3개뿐이고 최소 20개가 필요합니다. |
+| DGX Spark / RTX 4090 | aspect_ratio_error | 두 기기에서 채점한 입력이 3개뿐이고 최소 20개가 필요합니다. |
+
+### 확인하지 않은 모델 카드 주장
+
+- 단일 GPU용 TI2V-5B 명령은 RTX 4090처럼 VRAM이 24GB인 GPU에서 돌아갑니다.
 
 ## 라이선스
 
 | 대상 | 라이선스 | 상업적 이용 |
 | :---: | --- | --- |
 | 이 서비스 | [`LICENSE`](LICENSE) | ✓ |
-| Wan2.2-TI2V-5B 가중치 | [`MODEL_LICENSE`](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/blob/main/README.md#license-agreement) | ✓ |
+| Wan2.2-TI2V-5B 가중치 | [`MODEL_LICENSE`](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/blob/main/README.md) | ✓ |

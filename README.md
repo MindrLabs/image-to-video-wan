@@ -2,18 +2,9 @@
 
 # image-to-video-wan
 
-This service takes one picture and a prompt that describes the motion, and returns a short video clip that starts from that picture, made with Wan-AI/Wan2.2-TI2V-5B.
+This service takes an image and a text description and returns a short video made with Wan-AI/Wan2.2-TI2V-5B.
 
-Measured on DGX Spark, RTX 4090; it is not compared with other models.
-Results marked “Judged by a person” are a person's verdicts, given before the agent's proposal was shown.
-A person wrote every feature observation from the output itself; the agent's draft was shown only afterwards.
-
-![A web page where an aquarium picture and a prompt go in and a clip of a drifting jellyfish comes out.](docs/images/demo.gif)
-
-## Model
-
-The Wan2.2 model card says TI2V-5B makes 720P, 24fps video from text and images and runs on a single consumer GPU such as the RTX 4090.
-The card also says the output follows the aspect ratio of the input picture and gives a time limit for a short 720P clip on a single consumer GPU.
+![An image of a person standing at an aquarium window and a text description go in and a video of a drifting jellyfish comes out](docs/images/demo.gif)
 
 ## Quick Start
 
@@ -44,121 +35,93 @@ Run it:
 model-compose up
 ```
 
-The API listens on http://localhost:8080/api.
-
-The Gradio UI opens at http://localhost:8081.
+The API listens on http://localhost:8080/api and the Gradio UI opens at http://localhost:8081.
 
 ## Summary
 
-1. It ran on the RTX 4090 and the DGX Spark, and both made all 6 clips without a failure.
-2. On both machines the clips passed the 720P area, 24fps and input aspect ratio rules, and a person passed the speed claim on the RTX 4090 and the claim that the clip follows the picture.
-3. All three pictures moved the way the prompt asked under a fixed camera, with jellyfish, ripples and passing scenery, but a face came out distorted in two clips.
-4. With only 3 pictures, the speed difference between the RTX 4090 and the DGX Spark could not be confirmed statistically.
+The RTX 4090 made each 5.04-second video in a median of 526 seconds, meeting the model card's speed claim for a single consumer GPU.
 
 | Machine | Status | RTF | Peak memory (MiB) |
 | :---: | --- | --- | --- |
-| DGX Spark | Measured | 276 | 30135 (VRAM) |
-| RTX 4090 | Measured | 102 | 24050 (VRAM) |
+| DGX Spark | Measured | 281 | 30013 (VRAM) |
+| RTX 4090 | Measured | 104 | 23942 (VRAM) |
+| MacBook M1 16GB | Not measured | — | — |
 
 ## Setup
 
-Feature outputs were made once per input and setting through the same measurement path, and a person confirmed an observation of every output.
+Measured with model-compose 0.4.120. Statistics use 95% intervals, and speed differences under 1.05× are not called.
 
-| Item | Value |
-| :---: | --- |
-| Inputs | 3 inputs × 2 repeats |
-| Weights | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) |
-| model-compose | 0.4.118 |
-| Claim rules | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
-| Statistics | 95% intervals, speed differences under 1.05× are not called |
+| Inputs | Weights | Claim rules |
+| :---: | --- | --- |
+| 3 inputs × 1 repeat | [Wan-AI/Wan2.2-TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/tree/921dbaf3f1674a56f47e83fb80a34bac8a8f203e) | fps = 24; pixels = 720p; aspect_ratio_error ≤ 0.05 |
 
-## Does It Run on My Device?
+## Results
 
-- Speed is given as RTF, the generation time divided by the length of the output clip, so lower is faster.
-- The median RTF was 102 on the RTX 4090 and 276 on the DGX Spark.
-- One 5.04-second clip took 514 to 518 seconds on the RTX 4090 and 1338 to 1420 seconds on the DGX Spark.
-- GPU memory peaked at 24050 MiB on the RTX 4090 and 30135 MiB on the DGX Spark.
+### Image to Video
 
-### Machine Comparisons
+An image starts the video and a text description of the motion goes in with it.
 
-| Machines | Metric | Inputs | Estimate | Interval | Result |
-| :---: | --- | --- | --- | --- | --- |
-| DGX Spark vs RTX 4090 | RTF | 3 | — | — | Not judged |
-| DGX Spark vs RTX 4090 | aspect_ratio_error | 3 | — | — | Not judged |
-
-## Results by Feature
-
-| Question | Result |
-| :---: | --- |
-| Can one picture and a short prompt turn that scene into a moving clip? | Yes, all three clips started from their picture and moved the way the prompt asked, but a face came out distorted in two of them. |
-
-### Animate a Still (5B)
-
-Three pictures went in, each with an English prompt that describes the motion in the scene and a static camera.
-
-| Claim | Check | Machine | Result |
+| Claim | Check | Machine | Pass |
 | :---: | --- | --- | --- |
-| TI2V-5B generates 24fps video. | Checked by rule | DGX Spark | Pass |
-| TI2V-5B generates 24fps video. | Checked by rule | RTX 4090 | Pass |
-| TI2V-5B generates 720P video. | Checked by rule | DGX Spark | Pass |
-| TI2V-5B generates 720P video. | Checked by rule | RTX 4090 | Pass |
-| The TI2V-5B video keeps the aspect ratio of the input image. | Checked by rule | DGX Spark | Pass |
-| The TI2V-5B video keeps the aspect ratio of the input image. | Checked by rule | RTX 4090 | Pass |
-| TI2V-5B turns an image into a video that follows the image. | Judged by a person | — | Pass |
-| TI2V-5B generates a 5-second 720P video in under 9 minutes on a single consumer-grade GPU. | Judged by a person | — | Pass |
+| TI2V-5B generates 24fps video. | Checked by rule | DGX Spark | ✓ |
+| TI2V-5B generates 24fps video. | Checked by rule | RTX 4090 | ✓ |
+| TI2V-5B generates 720P video. | Checked by rule | DGX Spark | ✓ |
+| TI2V-5B generates 720P video. | Checked by rule | RTX 4090 | ✓ |
+| The TI2V-5B video keeps the aspect ratio of the input image. | Checked by rule | DGX Spark | ✓ |
+| The TI2V-5B video keeps the aspect ratio of the input image. | Checked by rule | RTX 4090 | ✓ |
+| TI2V-5B turns an image into a video that follows the image. | Judged by a person | — | ✓ |
+| TI2V-5B generates a 5-second 720P video in under 9 minutes on a single consumer-grade GPU. | Judged by a person | — | ✓ |
 
-| Machine | RTF | Peak memory (MiB) | aspect_ratio_error | duration_sec | fps | height | pixels | width | Claims |
+We measured on DGX Spark, RTX 4090. We could not measure on MacBook M1 16GB. RTF is the processing time divided by the length of the audio or video, so lower is faster. Each cell is the median over measured calls, leaving out any call made during other GPU work.
+
+| Machine | RTF | Seconds per call | Peak memory (MiB) | aspect_ratio_error | duration_sec | fps | height | pixels | width |
 | :---: | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| DGX Spark | 276 | 30135 (VRAM) | 0.0177 | 5.04 | 24 | 1003 | 878592 | 928 | Pass |
-| RTX 4090 | 102 | 24050 (VRAM) | 0.0177 | 5.04 | 24 | 1003 | 878592 | 928 | Pass |
+| DGX Spark | 281 | 1419 | 30013 (VRAM) | 0.0256 | 5.04 | 24 | 896 | 882688 | 1013 |
+| RTX 4090 | 104 | 526 | 23942 (VRAM) | 0.0256 | 5.04 | 24 | 896 | 882688 | 1013 |
 
-Each cell is the median over measured calls, leaving out any call made during other GPU work.
+![Image to Video](docs/images/image-to-video-aquarium-jellyfish.gif)
 
-| Machine | Input | Seconds | RTF | Peak memory (MiB) |
-| :---: | --- | --- | --- | --- |
-| RTX 4090 | aquarium-jellyfish | 518 | 103 | 24008 (VRAM) |
-| RTX 4090 | flooded-city | 514 | 102 | 24050 (VRAM) |
-| RTX 4090 | train-turtle | 518 | 103 | 23928 (VRAM) |
+> A girl in a school uniform stands still before a giant aquarium window, looking up as a huge glowing jellyfish drifts slowly with its long tentacles trailing, small fish swim past, sunlight ripples down through the water, static camera.
 
-![Animate a still (5B), RTX 4090](docs/images/animate-a-still.jpg)
+![Image to Video](docs/images/image-to-video-falling-crosswalk.gif)
 
-RTX 4090: Frames from the aquarium, flooded city and train and turtle clips.
+> A girl in a school uniform drifts down through the air toward a sunlit crosswalk, her short hair and pleated skirt flutter in the wind, she reaches out with both arms, rippling light shimmers across the asphalt below and her shadow grows on the road, the camera slowly arcs a little around her, shifting the viewing angle.
 
-Rows, top to bottom:
+![Image to Video](docs/images/image-to-video-train-turtle.gif)
 
-- aquarium-jellyfish: prompt=A girl in a school uniform stands still before a giant aquarium window, looking up as a huge glowing jellyfish drifts slowly with its long tentacles trailing, small fish swim past, sunlight ripples down through the water, static camera.; image
-- flooded-city: prompt=A girl stands in shallow clear water on a flooded crosswalk between towering scaffolded buildings, looking up at a golden sky, clouds drift slowly, sheets of paper flutter in the wind, gentle ripples spread across the water, static camera.; image
-- train-turtle: prompt=A girl sits on a train bench gazing out the window as a giant turtle glides past over a ruined, overgrown city, its eye blinking slowly, warm sunbeams shift across the carriage as the train sways gently, static camera.; image
-
-- In the aquarium clip the jellyfish moved, small fish swam and the camera stayed fixed.
-- In the flooded city clip the water rippled, a flag waved and the camera stayed fixed.
-- In the train and turtle clip the turtle blinked, the scenery passed outside the window, the light scattered and the camera stayed fixed.
+> A girl sits on a train bench gazing out the window as a giant turtle glides past over a ruined, overgrown city, its eye blinking slowly, warm sunbeams shift across the carriage as the train sways gently, static camera.
 
 ## Recommendations
 
-- The RTX 4090 uses nearly all of its GPU memory, so do not run other work on the same GPU.
-- Faces can come out distorted, so watch the whole clip before using it.
+- The RTX 4090 used up to 23942 MiB of GPU memory, so free that much before you start.
 
 ## Limitations and What We Did Not Measure
 
-### Defects
+- Each of the 3 inputs was generated only once, so the person's judgment of the motion applies only to these outputs.
 
-- In the flooded city clip the girl's face came out distorted.
-- In the train and turtle clip the light grew too strong and the girl's face came out distorted.
+### Measurement Conditions
 
-### Other Limitations
+| Item | Detail |
+| :---: | --- |
+| Constraint | The measurements set PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True in the server environment, because without it the VAE decode ran out of memory on the RTX 4090. |
+| Constraint | Measurements ran with WAN_CPU_OFFLOAD=true, while model-compose.yml defaults it to false. |
+| Claim rules | Claims with a rule were checked on each machine against the number their source gives. |
 
-- DGX Spark and RTX 4090 were not compared on RTF: Only 3 inputs were measured on both machines without other GPU work, and at least 20 are needed.
-- DGX Spark and RTX 4090 were not compared on aspect_ratio_error: Only 3 inputs were scored on both machines, and at least 20 are needed.
-- Not tested here: The single-GPU TI2V-5B command runs on a GPU with 24GB of VRAM such as the RTX 4090.
-- The server sets PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True, because without it the VAE decode ran out of memory on the RTX 4090.
-- Speed and the person's verdicts come from only 3 pictures.
-- The card's memory requirement for a single GPU was seen on one RTX 4090 only, and that claim itself was not tested.
-- Claims with a rule were checked on each machine against the number their source gives.
+### Not Measured
+
+| Subject | Item | Reason |
+| :---: | --- | --- |
+| MacBook M1 16GB | Every measurement | The model's flash-attn dependency could not be installed on Apple Silicon. |
+| DGX Spark vs RTX 4090 | RTF | 3 inputs measured on both without other GPU work, at least 20 are needed. |
+| DGX Spark vs RTX 4090 | aspect_ratio_error | 3 inputs scored on both, at least 20 are needed. |
+
+### Unchecked Model Card Claims
+
+- The single-GPU TI2V-5B command runs on a GPU with 24GB of VRAM such as the RTX 4090.
 
 ## License
 
 | Covers | License | Commercial use |
 | :---: | --- | --- |
 | This service | [`LICENSE`](LICENSE) | ✓ |
-| Wan2.2-TI2V-5B weights | [`MODEL_LICENSE`](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/blob/main/README.md#license-agreement) | ✓ |
+| Wan2.2-TI2V-5B weights | [`MODEL_LICENSE`](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B/blob/main/README.md) | ✓ |
