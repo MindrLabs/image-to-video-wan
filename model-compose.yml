@@ -15,6 +15,7 @@ workflows:
       component: wan-ti2v-5b
       input: ${input}
       output: ${output}
+
     output: ${jobs.__job__.output}
 
 components:
